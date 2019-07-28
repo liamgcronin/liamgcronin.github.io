@@ -1,12 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>test 20190728</title>
-</head>
-<body>
-    
-</body>
+<html>
+    <body>
+        <input id="iBox">
+        <button onclick="fGuess()">Guess</button>
+        <script>
+            function fGuess(){
+                if (iBox.value == 5){
+                    iBox.value="You win!";
+                }else{
+                    iBox.value="Try again.";
+                }
+            }
+        </script>
+    </body>
 </html>
