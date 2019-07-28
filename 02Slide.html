@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SlidingPuzzle4NUMBERS0Counting.html</title>
+    <style>
+        body{
+            background-color: white;
+        }
+        table,
+        td {
+            text-align: center;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .td3 {
+            text-align: center;
+            border: 1px solid white;
+            border-collapse: collapse;
+            font-size: .5em;
+        }
+
+        .td2 {
+            text-align: center;
+            border: 1px solid blue;
+            border-collapse: collapse;
+            /* font-size: .5em; */
+        }
+
+        .td4 {
+            text-align: center;
+            border: 1px solid white;
+            border-collapse: collapse;
+            /* font-size: .5em; */
+        }
+
+        table {
+            font-size: 2em;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body onload="init()" style="background-color: #FFFFFF; 
+background-image: url('img/bg02TopOnly_02_SlidingPuzzle_00.png');
+background-attachment: fixed;
+background-repeat: no-repeat;
+background-size: 100%">
+<!-- <body> -->
+    <br>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <td id="00">00</td>
+            <td id="01">01</td>
+            <td id="02">02</td>
+        </tr>
+        <tr>
+            <td id="10">10</td>
+            <td id="11">11</td>
+            <td id="12">22</td>
+        </tr>
+        <tr>
+            <td id="20">20</td>
+            <td id="21">21</td>
+            <td id="22">22</td>
+        </tr>
+        <tr>
+            <td colspan="3" id="Restart">Restart</td>
+        </tr>
+        <tr>
+            <table align="center">
+                <tr>
+                    <td style="font-size:9pt;border: 1px solid lightgrey;text-align: center;">Count:</td>
+                    <td style="font-size:9pt;border: 1px solid rgb(14, 243, 102);text-align: center;width:10%;"
+                        id="count">0</td>
+                    <!-- <td style="font-size:9pt;border: 1px solid lightgrey;text-align: center;">Correct:</td>
+                    <td style="font-size:9pt;border: 1px solid darkcyan;text-align: center;width:10%;" id="Correct">?</td>
+                    <td style="font-size:9pt;border: 1px solid lightgrey;text-align: center;">Percentage:</td>
+                    <td style="font-size:9pt;border: 1px solid darkorange;text-align: center;width:15%;"  id="Percentage">?</td> -->
+                    <td style="font-size:9pt;border: 1px solid lightgrey;text-align: center;">Left:</td>
+                    <td style="font-size:9pt;border: 1px solid darkseagreen;text-align: center;width:10%;" id="Left">00
+                    </td>
+                </tr>
+            </table>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <button onclick="Easy()">Easy</button>
+    <button onclick="Medium()">Medium</button>
+    <button onclick="Hard()">Hard</button>
+    <!-- <table>
+        <tr>
+            <td class="td2"></td>
+        </tr>
+        <tr style="height:.5em">
+            <td colspan="3" class="td4"></td>
+        </tr>
+        <tr style="height:2em">
+            <td class="td4"></td>
+            <td class="td" id="count">00</td>
+            <td class="td4"></td>
+        </tr>
+    </table> -->
+    <script>
+
+        // //                   a00    b02    c02      d10    e11    f12      g20    h21    22
+        // let puzzleArray = [["a00", "b02", "c02"], ["d10", "e11", "f12"], ["g20", "h21", "22"]];
+        // let puzzleArray = [["n", "h", "e"], ["e", "T", "d"], ["i", "s", ""]];
+        // let solutionArray = [["n", "h", "e"], ["e", "T", "d"], ["i", "s", ""]];
+        // let puzzleArray = [["n", "h", "e"], ["e", "T", "d"], ["i", "s", ""]];
+        let puzzleArray = [["a", "b", "c"], ["d", "e", "f"], ["g", "", "h"]];
+        let solutionArray = [["a", "b", "c"], ["d", "e", "f"], ["g", "h", ""]];
+        // let solutionArray = [["T", "h", "e"], ["e", "n", "d"], ["i", "s", ""]];
+
+        let tTimeRemaining, bTimeUp, iInterval = null, count, bSolved;
+
+        function init() {
+            bSolved = false;
+            count = 0;
+            tTimeRemaining = 120;
+            bTimeUp = false;
+            document.getElementById('count').textContent = count;
+            document.getElementById('Left').style.backgroundColor = "white";
+            document.getElementById('Left').style.color = "black";
+            document.getElementById('Left').textContent = tTimeRemaining;
+            document.getElementById("Restart").textContent = "Restart";
+            document.getElementById("Restart").style.color = "black";
+            document.getElementById("Restart").style.backgroundColor = "white";
+            for (x = 0; x < 3; x++) {
+                for (y = 0; y < 3; y++) {
+                    document.getElementById("" + x + y).textContent = puzzleArray[x][y];
+                }
+            }
+            clearInterval(iInterval);
+            iInterval = setInterval(left, 1000);
+        }
+
+        init();
+
+        function Easy(){
+            puzzleArray = [["a", "b", "c"], ["e", "f", ""], ["d", "g", "h"]];
+            init();
+        };
+
+        function Medium(){
+            puzzleArray = [["a", "f", "b"], ["d", "c", "h"], ["g", "e", ""]];
+            init();
+        };
+
+        function Hard(){
+            puzzleArray = [["", "b", "c"], ["d", "e", "f"], ["g", "h", "a"]];
+            init();
+        };
+
+        function left() {
+            if (tTimeRemaining > 0) {
+                tTimeRemaining--;
+                document.getElementById('Left').textContent = tTimeRemaining;
+                if (tTimeRemaining < 115 && tTimeRemaining >= 46) {
+                    document.getElementById('Left').style.backgroundColor = "green";
+                    document.getElementById('Left').style.color = "white";
+                } else if (tTimeRemaining < 45 && tTimeRemaining >= 30) {
+                    document.getElementById('Left').style.backgroundColor = "orange";
+                    document.getElementById('Left').style.color = "white";
+                } else if (tTimeRemaining < 30) {
+                    document.getElementById('Left').style.backgroundColor = "red";
+                    document.getElementById('Left').style.color = "white";
+                }
+            } else {
+                bTimeUp = true;
+                document.getElementById("Restart").textContent = "TIME UP!";
+                document.getElementById("Restart").style.color = "white";
+                document.getElementById("Restart").style.backgroundColor = "darkorange";
+            }
+
+            debugger;
+            bSolved = true;
+            for (i = 0; i < 3; i++) {
+                for (j = 0; j < 3; j++) {
+                    if (document.getElementById("" + i + j).textContent !== solutionArray[i][j]) {
+                        bSolved = false;
+                        //alert('false: [' + i + '][' + j + '] solutionArray[i][j] ' + solutionArray[i][j] + '  document.getElementById("" + i + j).textContent' + 'document.getElementById("" + i + j).textContent)');
+                        // break;
+                    }
+                }
+            }
+            if (bSolved == true) {
+                // alert("Solved");
+                clearInterval(iInterval);
+                document.getElementById("Restart").textContent = "SOLVED!";
+                document.getElementById("Restart").style.color = "white";
+                document.getElementById("Restart").style.backgroundColor = "darkseagreen";
+            }else{
+                // alert("Solved not");
+            }
+
+        }
+
+
+
+        document.getElementById("Restart").addEventListener("click", function () {
+            // alert(1);
+            init();
+        });
+
+        document.getElementById("00").addEventListener("click", function () {
+            shift(0, 0);
+        });
+
+        document.getElementById("01").addEventListener("click", function () {
+            shift(0, 1);
+        });
+
+        document.getElementById("02").addEventListener("click", function () {
+            shift(0, 2);
+        });
+
+        document.getElementById("10").addEventListener("click", function () {
+            shift(1, 0);
+        });
+
+        document.getElementById("11").addEventListener("click", function () {
+            shift(1, 1);
+        });
+
+        document.getElementById("12").addEventListener("click", function () {
+            shift(1, 2);
+        });
+
+        document.getElementById("20").addEventListener("click", function () {
+            shift(2, 0);
+        });
+
+        document.getElementById("21").addEventListener("click", function () {
+            shift(2, 1);
+        });
+
+        document.getElementById("22").addEventListener("click", function () {
+            shift(2, 2);
+        });
+
+
+        function shift(x, y) {
+            if (bTimeUp) return;
+            let next = "";
+            let solved = true;
+            count++;
+            document.getElementById('count').textContent = count;
+
+
+            //02-TOP blank?
+            if (x > 0) {
+                next = "" + (x - 1) + y;
+                if (document.getElementById(next).textContent == "") {
+                    document.getElementById(next).textContent = document.getElementById("" + x + y).textContent;
+                    document.getElementById("" + x + y).textContent = "";
+                }
+            }
+
+            //12-RIGHT blank
+            if (y < 2) {
+                next = "" + x + (y + 1);
+                if (document.getElementById(next).textContent == "") {
+                    document.getElementById(next).textContent = document.getElementById("" + x + y).textContent;
+                    document.getElementById("" + x + y).textContent = "";
+                }
+            }
+
+            //10-LEFT blank
+            if (y > 0) {
+                next = "" + (x) + (y - 1);
+                if (document.getElementById(next).textContent == "") {
+                    document.getElementById(next).textContent = document.getElementById("" + x + y).textContent;
+                    document.getElementById("" + x + y).textContent = "";
+                }
+            }
+
+            //21-BOTTOM blank
+            if (x < 2) {
+                next = "" + (x + 1) + (y);
+                if (document.getElementById(next).textContent == "") {
+                    document.getElementById(next).textContent = document.getElementById("" + x + y).textContent;
+                    document.getElementById("" + x + y).textContent = "";
+                }
+            }
+
+        }
+
+
+
+    </script>
+</body>
+
+</html>
